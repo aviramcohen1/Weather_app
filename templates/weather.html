@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function getWeather() {
+            var cityInput = document.getElementById('city');
+            var city = cityInput.value.trim();
+
+            if (city === "") {
+                alert("Please enter a valid city name.");
+                return;
+            }
+
+            fetch('/weather/' + city)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    document.getElementById('result').innerText = "City: " + data.city +
+                                                                  "\nTemperature: " + data.temperature + "°C" +
+                                                                  "\nWeather: " + data.weather;
+                })
+                .catch(function(error) {
+                    console.log('Error:', error);
+                    document.getElementById('result').innerText = "Error: Failed to retrieve weather data.";
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+    <div id="result"></div>
+</body>
+</html>
