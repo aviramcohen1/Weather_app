@@ -68,9 +68,9 @@ def index():
     return render_template('weather.html')
 
 
-@app.route('/weather/<city>')
+@app.route('/weather/<path:city>')
 def get_weather(city):
-    if not city or not city.isalpha():
+    if not city:
         logger.warning("Invalid city name: %s", city)
         return jsonify({"error": "Invalid city name."}), 400
 
@@ -95,7 +95,6 @@ def get_weather(city):
     except requests.exceptions.RequestException as e:
         logger.error("Error occurred during data retrieval: %s", str(e))
         return jsonify({"error": "Failed to retrieve data from the API."}), 500
-
 
 if __name__ == '__main__':
     # Load environment variables from a .env file if it exists
